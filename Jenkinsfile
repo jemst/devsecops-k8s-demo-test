@@ -9,18 +9,7 @@ pipeline {
             }
           }
 
-      stage('SonarQube - SAST'){
-        steps {
-          withSonarQubeEnv('SonarQube'){
-            sh "mvn sonar:sonar -Dsonar.projectKey=numeric-applicaiton -Dsonar.host.url=http://devsecops-demo-test.eastus.cloudapp.azure.com:9000 -Dsonar.login=08bb2c00895c02191c9df73d2545e6d4cb53865f"
-        }
-          timeout(time: 2, unit: 'MINUTES') {
-            script {
-              waitForQualityGate abortPipeline:true
-            }
-          }
-      }
-      }
+
       stage('Unit Tests - JUnit and Jacoco') {
           steps {
             sh "mvn test"
@@ -44,6 +33,18 @@ pipeline {
         }
       }
 
+      stage('SonarQube - SAST'){
+        steps {
+          withSonarQubeEnv('SonarQube'){
+            sh "mvn sonar:sonar -Dsonar.projectKey=numeric-applicaiton -Dsonar.host.url=http://devsecops-demo-test.eastus.cloudapp.azure.com:9000 -Dsonar.login=08bb2c00895c02191c9df73d2545e6d4cb53865f"
+        }
+          timeout(time: 2, unit: 'MINUTES') {
+            script {
+              waitForQualityGate abortPipeline:true
+            }
+          }
+      }
+      }
       stage('Docker-Build and Push') {
           steps {
              withDockerRegistry([credentialsId:"docker-hub", url: ""]) {
