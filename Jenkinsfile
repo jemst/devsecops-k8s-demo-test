@@ -9,11 +9,11 @@ pipeline {
             }
           }
 
-  stages('SonarQube - SAST'){
-    steps {
-      sh "mvn sonar:sonar -Dsonar.projectKey=numeric-applicaiton -Dsonar.host.url=http://devsecops-demo-test.eastus.cloudapp.azure.com:9000 -Dsonar.login=08bb2c00895c02191c9df73d2545e6d4cb53865f"
-    }
-  }
+      stage('SonarQube - SAST'){
+        steps {
+          sh "mvn sonar:sonar -Dsonar.projectKey=numeric-applicaiton -Dsonar.host.url=http://devsecops-demo-test.eastus.cloudapp.azure.com:9000 -Dsonar.login=08bb2c00895c02191c9df73d2545e6d4cb53865f"
+        }
+      }
 
       stage('Unit Tests - JUnit and Jacoco') {
           steps {
